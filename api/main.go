@@ -1,16 +1,27 @@
 package main
 
-import "fmt"
+import (
+	"encoding/json"
+	"fmt"
+	"log"
+	"net/http"
+	"strconv"
+)
 
-func generateString(str string) string {
-	return str + "?"
-}
+var count = 0
 
 func main() {
-	var dictionary = make(map[string]int)
-	dictionary["a"] = 4
-	dictionary["b"] = 42
-	var array = [4]int{1, 2, 3, 4}
-	fmt.Print(dictionary)
-	fmt.Print(array)
+	http.HandleFunc("/", handler)
+	log.Fatal(http.ListenAndServe(":9010", nil))
+}
+
+func handler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	fmt.Print("got request")
+	count++
+	var encoder = json.NewEncoder(w)
+	encoder.Encode(map[string]string{
+		"count": strconv.Itoa(count),
+		"ip":    r.RemoteAddr,
+	})
 }

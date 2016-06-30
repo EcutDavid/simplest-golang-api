@@ -1,18 +1,50 @@
 import 'normalize.css/normalize.css'
-import 'styles/App.scss'
 import React from 'react'
+import request from 'superagent'
+
+import 'styles/App.scss'
+
 
 class AppComponent extends React.Component {
+  constructor() {
+    super()
+    this.state = { count: undefined, ip: undefined, descrition: undefined }
+  }
+
+  componentWillMount() {
+    request
+    .get('http://localhost:9010')
+    .send()
+    .end((err, res) => {
+      if (err) {
+        this.setState({ descrition: 'something wrong the server, can you refresh the page?' })
+        return
+      }
+      const { ip, count } = JSON.parse(res.text)
+      this.setState({ ip, count })
+    })
+  }
+
   render() {
+    const { count, descrition, ip } = this.state
     return (
-      <div className="index">
-        <div className="notice">Hello human</div>
+      <div className="main">
+        {
+          count ? (
+            <div>
+              <h1>Thanks for visit</h1>
+              <h2>This webpage has been visted { `${count} ${count > 1 ? 'times' : 'time'}` }</h2>
+              <h2>Your IP address is: {ip}</h2>
+            </div>
+          ) : (
+            <h1>
+              { descrition ? descrition : 'Hi, We are communicating with golang sever' }
+            </h1>
+          )
+        }
       </div>
     )
   }
-}
-
-AppComponent.defaultProps = {
 }
 
 export default AppComponent
