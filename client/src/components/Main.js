@@ -3,6 +3,7 @@ import React from 'react'
 import request from 'superagent'
 
 import 'styles/App.scss'
+import { apiUrl } from '../config/api'
 
 
 class AppComponent extends React.Component {
@@ -13,7 +14,7 @@ class AppComponent extends React.Component {
 
   componentWillMount() {
     request
-    .get('http://localhost:9010')
+    .get(apiUrl)
     .send()
     .end((err, res) => {
       if (err) {
@@ -29,6 +30,7 @@ class AppComponent extends React.Component {
     const { count, descrition, ip } = this.state
     return (
       <div className="main">
+        <h1 className="title">Simplest golang data api</h1>
         {
           count ? (
             <div>
