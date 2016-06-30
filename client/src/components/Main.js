@@ -36,7 +36,7 @@ class AppComponent extends React.Component {
             <div>
               <h1>Thanks for visit</h1>
               <h2>This webpage has been visted { `${count} ${count > 1 ? 'times' : 'time'}` }</h2>
-              <h2>Your IP address is: {ip}</h2>
+              <h2>Your IP address is: {ip.replace(/:[0-9]{1,}/g, '')}</h2>
             </div>
           ) : (
             <h1>
